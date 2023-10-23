@@ -43,8 +43,8 @@ services:
     networks:
       - arch-network
     depends_on:
-      mai-db-node-ex01:
-        condition: service_healthy
+      - mai-db-node-ex01
+
   other_server:
     build:
       context: other_server
