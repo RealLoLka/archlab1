@@ -1,4 +1,4 @@
-version: '3.3'
+version: '2.1'
 
 services:
   mai-db-node-ex01:
@@ -21,16 +21,17 @@ services:
     ports:
       - 3360:3306
     volumes:
-      - db-node-ex01-data:/var/lib/mysql
+      - mai-db-node-ex01-data:/var/lib/mysql
 
   my_service:
     build:
       context: my_service
       dockerfile: Dockerfile
     container_name: my_service
+    restart: unless-stopped
     environment:
       - DB_HOST=mai-db-node-ex01
-      - DB_PORT=3360
+      - DB_PORT=3306
       - DB_LOGIN=stud
       - DB_PASSWORD=stud
       - DB_DATABASE=archdb
@@ -39,7 +40,8 @@ services:
     networks:
       - arch-network
     depends_on:
-      - mai-db-node-ex01
+      mai-db-node-ex01:
+        condition: service_started
 
   other_server:
     build:
@@ -54,7 +56,7 @@ services:
       - arch-network
 
 volumes:
-  db-node-ex01-data:
+  mai-db-node-ex01-data:
 
 networks:
   arch-network:
